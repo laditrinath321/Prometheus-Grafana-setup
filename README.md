@@ -1,10 +1,10 @@
-Here's your **final complete guide** with the **Kubernetes Deployment** and **Service YAML** included for your Facebook app deployed on the EKS cluster:
+Thanks! Based on your update, I’ve incorporated the **EC2 setup as the first step** and added your **Kubernetes Deployment and Service YAML** to the final guide. Here’s the **complete and final version** of your documentation:
 
 ---
 
 # 🚀 Prometheus & Grafana Monitoring on EKS using Helm
 
-> 🔧 End-to-end observability made simple — from setup to visual dashboards in your Kubernetes cluster!
+> 🔧 End-to-end observability made simple — from EC2 setup to visual dashboards in your Kubernetes cluster!
 
 ![grafana-dashboard](https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg)
 
@@ -20,9 +20,24 @@ This repository provides a step-by-step guide to **deploy Prometheus and Grafana
 
 ---
 
-## 🔧 Prerequisites
+## 🧱 Step 0: Launch EC2 (Amazon Linux)
 
-Make sure you have the following tools installed:
+1. Open AWS Console → Launch EC2 Instance
+2. Choose Amazon Linux 2 AMI
+3. Instance Type: `t2.micro`
+4. Key Pair: Create/Choose existing
+5. Allow ports: `22`, `80`, `443`
+6. Launch and SSH into it:
+
+```bash
+ssh -i "<your-key>.pem" ec2-user@<your-ec2-public-ip>
+```
+
+---
+
+## 🔧 Prerequisites (Install on EC2)
+
+Install the following:
 
 | Tool      | Version (Recommended) | Installation                                                                                                                                                                       |
 | --------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -82,13 +97,14 @@ helm repo update
 kubectl create namespace prometheus
 
 helm install kube-monitor prometheus-community/kube-prometheus-stack -n prometheus
-# (Optional workaround for timeout errors)
+
+# Optional workaround for timeout errors:
 # helm install kube-monitor prometheus-community/kube-prometheus-stack -n prometheus --set prometheus.prometheusSpec.maximumStartupDurationSeconds=600
 ```
 
 ---
 
-## 🌐 Expose Grafana & Prometheus
+## 🌐 Expose Grafana & Prometheus Services
 
 ```bash
 kubectl patch svc kube-monitor-kube-prometheus-sta-prometheus -n prometheus -p '{"spec": {"type": "LoadBalancer"}}'
@@ -110,11 +126,12 @@ kubectl get secret --namespace prometheus kube-monitor-grafana -o jsonpath="{.da
 
 ---
 
-## 📦 App Deployment: Facebook Clone
+## 🚀 Deploy Sample App: Facebook Clone
 
-### 📁 `fb-deployment.yaml`
+Here’s a sample Deployment & Service YAML used in this setup:
 
 ```yaml
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -123,10 +140,10 @@ metadata:
     app: facebook
     env: lab
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: facebook
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -145,13 +162,7 @@ spec:
           image: devopshubg333/batch15d:9
           ports:
             - containerPort: 8080
-```
-
 ---
-
-### 📁 `fb-service.yaml`
-
-```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -160,11 +171,15 @@ metadata:
     app: facebook
 spec:
   type: LoadBalancer
-  selector:
-    app: facebook
   ports:
     - port: 80
       targetPort: 8080
+  selector:
+    app: facebook
+```
+
+```bash
+kubectl apply -f fb-app.yaml
 ```
 
 ---
@@ -190,15 +205,14 @@ To troubleshoot efficiently, observe:
 
 ---
 
----
-
 ## 🙌 Contributing
 
 Want to improve this stack or add Loki, Tempo, or AlertManager? Feel free to open a PR!
 
 ---
 
+## ⭐ Star this repo if you found it helpful!
+
 ---
 
-## ⭐ Star this repo if you found it helpful!
 
