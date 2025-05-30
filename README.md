@@ -1,3 +1,7 @@
+Here's your **final complete guide** with the **Kubernetes Deployment** and **Service YAML** included for your Facebook app deployed on the EKS cluster:
+
+---
+
 # 🚀 Prometheus & Grafana Monitoring on EKS using Helm
 
 > 🔧 End-to-end observability made simple — from setup to visual dashboards in your Kubernetes cluster!
@@ -106,6 +110,65 @@ kubectl get secret --namespace prometheus kube-monitor-grafana -o jsonpath="{.da
 
 ---
 
+## 📦 App Deployment: Facebook Clone
+
+### 📁 `fb-deployment.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fb-deploy
+  labels:
+    app: facebook
+    env: lab
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: facebook
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      name: fbpod
+      labels:
+        app: facebook
+        env: lab
+        Version: AC_V1
+    spec:
+      containers:
+        - name: fbcont1
+          image: devopshubg333/batch15d:9
+          ports:
+            - containerPort: 8080
+```
+
+---
+
+### 📁 `fb-service.yaml`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fb-lb-svc
+  labels:
+    app: facebook
+spec:
+  type: LoadBalancer
+  selector:
+    app: facebook
+  ports:
+    - port: 80
+      targetPort: 8080
+```
+
+---
+
 ## 📌 Observability Triangle
 
 To troubleshoot efficiently, observe:
@@ -129,4 +192,13 @@ To troubleshoot efficiently, observe:
 
 ---
 
+## 🙌 Contributing
+
+Want to improve this stack or add Loki, Tempo, or AlertManager? Feel free to open a PR!
+
+---
+
+---
+
 ## ⭐ Star this repo if you found it helpful!
+
