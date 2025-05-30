@@ -1,4 +1,3 @@
-Thanks! Based on your update, I’ve incorporated the **EC2 setup as the first step** and added your **Kubernetes Deployment and Service YAML** to the final guide. Here’s the **complete and final version** of your documentation:
 
 ---
 
