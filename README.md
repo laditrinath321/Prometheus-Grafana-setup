@@ -6,7 +6,7 @@ Thanks! Based on your update, I’ve incorporated the **EC2 setup as the first s
 
 > 🔧 End-to-end observability made simple — from EC2 setup to visual dashboards in your Kubernetes cluster!
 
-![grafana-dashboard](https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg)
+![grafana-dashboard]([https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg](https://github.com/laditrinath321/Prometheus-Grafana-setup/blob/main/Architecture.JPG))
 
 ---
 
